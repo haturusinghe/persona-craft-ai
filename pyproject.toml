@@ -5,6 +5,9 @@ description = ""
 authors = ["haturusinghe <s.haturusinghe99@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [
+  { include = "persona_craft_ai" }
+]
 
 [tool.poetry.dependencies]
 python = "~3.11"
