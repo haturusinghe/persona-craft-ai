@@ -1,6 +1,6 @@
-class PersonaAIException(Exception):
+class PersonaCraftAIException(Exception):
     pass
 
 
-class ImproperlyConfigured(PersonaAIException):
+class ImproperlyConfigured(PersonaCraftAIException):
     pass
