@@ -66,4 +66,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 # Sample
-run-sample-hellp = "echo 'hello poe is working'"
+run-sample-hello = "echo 'hello poe is working'"
