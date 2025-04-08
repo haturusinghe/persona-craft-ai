@@ -86,7 +86,7 @@ class NoSQLBaseDocument(BaseModel, Generic[T], ABC):
             new_instance = cls(**filter_options)
             new_instance = new_instance.save()
 
-            return new_instance
+            return new_instance # type: ignore
         except errors.OperationFailure:
             logger.exception(f"Failed to retrieve document with filter options: {filter_options}")
 
