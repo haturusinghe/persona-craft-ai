@@ -30,7 +30,7 @@ This CLI tool is designed to help you run the Persona Craft AI application with 
 )
 @click.option(
     "--etl-config-filename",
-    default="digital_data_person1.yaml",
+    default="digital_data_person_1.yaml",
     help="Filename of the ETL config file.",
 )
 @click.option(
@@ -43,7 +43,7 @@ This CLI tool is designed to help you run the Persona Craft AI application with 
 def main(
     no_cache: bool = False,
     run_etl: bool = False,
-    etl_config_filename: str = "digital_data_etl_paul_iusztin.yaml",
+    etl_config_filename: str = "digital_data_person_1.yaml",
     export_settings: bool = False,
 ) -> None:
     assert (
