@@ -1,0 +1,5 @@
+parameters:
+  user_full_name: John Doe # [First Name(s)] [Last Name]
+  links:
+    - https://example.com/article1
+    - https://example.com/article2
