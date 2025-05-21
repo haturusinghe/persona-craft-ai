@@ -1,7 +1,5 @@
 # PersonaCraft.AI
 
-**An AI-powered pipeline for generating personalized training datasets from digital personas**
-
 PersonaCraft.AI is a comprehensive machine learning platform that crawls, processes, and transforms digital content from various sources into high-quality instruction and preference datasets for training AI models. The system creates personalized AI training data by analyzing an individual's digital footprint across multiple platforms.
 
 ## 🚀 Features
