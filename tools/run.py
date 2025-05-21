@@ -7,7 +7,9 @@ from loguru import logger
 from persona_craft_ai import settings
 from pipelines import (
     digital_data_etl,
-    feature_engineering
+    feature_engineering,
+    generate_datasets,
+    end_to_end_data
 )
 
 @click.command(
@@ -46,6 +48,24 @@ This CLI tool is designed to help you run the Persona Craft AI application with 
     default=False,
     help="Whether to run the feature engineering pipeline.",
 )
+@click.option(
+    "--run-generate-instruct-datasets",
+    is_flag=True,
+    default=False,
+    help="Whether to run the instruct dataset generation pipeline.",
+)
+@click.option(
+    "--run-generate-preference-datasets",
+    is_flag=True,
+    default=False,
+    help="Whether to run the preference dataset generation pipeline.",
+)
+@click.option(
+    "--run-end-to-end-data",
+    is_flag=True,
+    default=False,
+    help="Whether to run all the data pipelines in one go.",
+)
 
 def main(
     no_cache: bool = False,
@@ -53,11 +73,17 @@ def main(
     etl_config_filename: str = "digital_data_person_1.yaml",
     export_settings: bool = False,
     run_feature_engineering: bool = False,
+    run_generate_instruct_datasets: bool = False,
+    run_generate_preference_datasets: bool = False,
+    run_end_to_end_data: bool = False,
 ) -> None:
     assert (
         run_etl
         or export_settings
         or run_feature_engineering
+        or run_generate_instruct_datasets
+        or run_generate_preference_datasets
+        or run_end_to_end_data
     ), "Please specify an action to run."
     root_dir = Path(__file__).resolve().parent.parent
 
@@ -68,6 +94,25 @@ def main(
     pipeline_args = {
         "enable_cache": not no_cache,
     }
+
+    if run_end_to_end_data:
+        run_args_end_to_end = {}
+        pipeline_args["config_path"] = root_dir / "configs" / "end_to_end_data.yaml"
+        assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
+        pipeline_args["run_name"] = f"end_to_end_data_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        end_to_end_data.with_options(**pipeline_args)(**run_args_end_to_end)
+
+    if run_generate_instruct_datasets:
+        run_args_cd = {}
+        pipeline_args["config_path"] = root_dir / "configs" / "generate_instruct_datasets.yaml"
+        pipeline_args["run_name"] = f"generate_instruct_datasets_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        generate_datasets.with_options(**pipeline_args)(**run_args_cd)
+
+    if run_generate_preference_datasets:
+        run_args_cd = {}
+        pipeline_args["config_path"] = root_dir / "configs" / "generate_preference_datasets.yaml"
+        pipeline_args["run_name"] = f"generate_preference_datasets_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        generate_datasets.with_options(**pipeline_args)(**run_args_cd)
 
 
     if run_etl:
