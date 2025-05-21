@@ -71,6 +71,18 @@ build-backend = "poetry.core.masonry.api"
 # Sample
 run-sample-hello = "echo 'hello poe is working'"
 
+# Data pipelines
+run-digital-data-etl-person2 = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename digital_data_etl_person_2.yaml"
+run-digital-data-etl-person1 = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename digital_data_etl_person_1.yaml"
+run-digital-data-etl = [
+    "run-digital-data-etl-person1",
+    "run-digital-data-etl-person2",
+]
+run-feature-engineering-pipeline = "poetry run python -m tools.run --no-cache --run-feature-engineering"
+run-generate-instruct-datasets-pipeline = "poetry run python -m tools.run --no-cache --run-generate-instruct-datasets"
+run-generate-preference-datasets-pipeline = "poetry run python -m tools.run --no-cache --run-generate-preference-datasets"
+run-end-to-end-data-pipeline = "poetry run python -m tools.run --no-cache --run-end-to-end-data"
+
 # Infrastructure
 ## Local infrastructure
 local-docker-infrastructure-up = "docker compose up -d"
