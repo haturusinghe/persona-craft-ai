@@ -6,7 +6,8 @@ from loguru import logger
 
 from persona_craft_ai import settings
 from pipelines import (
-    digital_data_etl
+    digital_data_etl,
+    feature_engineering
 )
 
 @click.command(
@@ -39,16 +40,24 @@ This CLI tool is designed to help you run the Persona Craft AI application with 
     default=False,
     help="Whether to export your settings to ZenML or not.",
 )
+@click.option(
+    "--run-feature-engineering",
+    is_flag=True,
+    default=False,
+    help="Whether to run the feature engineering pipeline.",
+)
 
 def main(
     no_cache: bool = False,
     run_etl: bool = False,
     etl_config_filename: str = "digital_data_person_1.yaml",
     export_settings: bool = False,
+    run_feature_engineering: bool = False,
 ) -> None:
     assert (
         run_etl
         or export_settings
+        or run_feature_engineering
     ), "Please specify an action to run."
     root_dir = Path(__file__).resolve().parent.parent
 
@@ -67,6 +76,12 @@ def main(
         assert pipeline_args["config_path"].exists(), f"Config file not found: {pipeline_args['config_path']}"
         pipeline_args["run_name"] = f"digital_data_etl_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
         digital_data_etl.with_options(**pipeline_args)(**run_args_etl)
+
+    if run_feature_engineering:
+        run_args_fe = {}
+        pipeline_args["config_path"] = root_dir / "configs" / "feature_engineering.yaml"
+        pipeline_args["run_name"] = f"feature_engineering_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        feature_engineering.with_options(**pipeline_args)(**run_args_fe)
 
 
 if __name__ == "__main__":
