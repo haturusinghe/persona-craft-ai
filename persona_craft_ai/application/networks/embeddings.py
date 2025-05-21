@@ -9,7 +9,7 @@ from sentence_transformers.SentenceTransformer import SentenceTransformer
 from sentence_transformers.cross_encoder import CrossEncoder
 from transformers import AutoTokenizer
 
-from llm_engineering.settings import settings
+from persona_craft_ai.settings import settings
 
 from .base import SingletonMeta
 
