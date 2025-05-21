@@ -1,0 +1,4 @@
+parameters:
+  author_full_names:
+    - John Doe
+    - Jane Doe
