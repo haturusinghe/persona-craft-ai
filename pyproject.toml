@@ -97,3 +97,19 @@ local-infrastructure-down = [
     "local-docker-infrastructure-down",
     "local-zenml-server-down",
 ]
+set-local-stack = "poetry run zenml stack set default"
+
+[tool.poe.tasks.local-zenml-server-up]
+control.expr = "sys.platform"
+
+[[tool.poe.tasks.local-zenml-server-up.switch]]
+case = "darwin"
+env = { OBJC_DISABLE_INITIALIZE_FORK_SAFETY = "YES" }
+cmd = "poetry run zenml login --local"
+
+[[tool.poe.tasks.local-zenml-server-up.switch]]
+case = "win32"
+cmd = "poetry run zenml login --local --blocking"
+
+[[tool.poe.tasks.local-zenml-server-up.switch]]
+cmd = "poetry run zenml login --local"
