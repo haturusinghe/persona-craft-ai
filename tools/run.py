@@ -9,7 +9,8 @@ from pipelines import (
     digital_data_etl,
     feature_engineering,
     generate_datasets,
-    end_to_end_data
+    end_to_end_data,
+    training
 )
 
 @click.command(
@@ -66,6 +67,12 @@ This CLI tool is designed to help you run the Persona Craft AI application with 
     default=False,
     help="Whether to run all the data pipelines in one go.",
 )
+@click.option(
+    "--run-training",
+    is_flag=True,
+    default=False,
+    help="Whether to run the training pipeline.",
+)
 
 def main(
     no_cache: bool = False,
@@ -76,6 +83,7 @@ def main(
     run_generate_instruct_datasets: bool = False,
     run_generate_preference_datasets: bool = False,
     run_end_to_end_data: bool = False,
+    run_training: bool = False
 ) -> None:
     assert (
         run_etl
@@ -84,6 +92,7 @@ def main(
         or run_generate_instruct_datasets
         or run_generate_preference_datasets
         or run_end_to_end_data
+        or run_training
     ), "Please specify an action to run."
     root_dir = Path(__file__).resolve().parent.parent
 
@@ -127,6 +136,12 @@ def main(
         pipeline_args["config_path"] = root_dir / "configs" / "feature_engineering.yaml"
         pipeline_args["run_name"] = f"feature_engineering_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
         feature_engineering.with_options(**pipeline_args)(**run_args_fe)
+
+    if run_training:
+        run_args_cd = {}
+        pipeline_args["config_path"] = root_dir / "configs" / "training.yaml"
+        pipeline_args["run_name"] = f"training_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        training.with_options(**pipeline_args)(**run_args_cd)
 
 
 if __name__ == "__main__":
